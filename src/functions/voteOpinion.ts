@@ -121,5 +121,5 @@ app.http("voteOpinion", {
   methods: ["POST"],
   authLevel: "anonymous",
   handler: voteOpinion,
-  route: "options/vote/{id}",
+  route: "opinions/vote/{id}",
 });
