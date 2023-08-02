@@ -1,7 +1,7 @@
 import { HttpRequest } from "@azure/functions";
 
 /**
- *
+ * Get the IP address of the client.
  * @param request The HTTP request.
  * @returns The IP of the client as string.
  */
