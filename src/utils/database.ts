@@ -1,11 +1,10 @@
 import { Schema, createConnection, ConnectOptions } from "mongoose";
 import { IOpinion } from "../models/IOpinion";
-import "dotenv/config";
 
 /**
  * The connection to the database.
  */
-const connection = createConnection(process.env.MONGO_CONNECTION_STRING, {
+const connection = createConnection(process.env["MONGO_CONNECTION_STRING"], {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   autoIndex: true,
