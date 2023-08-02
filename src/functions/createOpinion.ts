@@ -6,6 +6,7 @@ import {
 } from "@azure/functions";
 import db from "../utils/database";
 import getClientIp from "../utils/getClientIp";
+import IOpinionResponse from "../models/IOpinionResponse";
 
 /**
  * The request body for POST method in route "opinions/create".
@@ -68,9 +69,21 @@ export async function createOpinion(
       colorHue: Math.floor(Math.random() * 360),
       ["votes.agree"]: [ip],
     });
+
+    // Returning the result.
+    const result: IOpinionResponse = {
+      id: opinion._id.toHexString(),
+      createdAt: opinion._id.getTimestamp(),
+      content: opinion.content,
+      colorHue: opinion.colorHue,
+      votes: {
+        agree: 1,
+        disagree: 0,
+      },
+    };
     return {
       status: 201,
-      jsonBody: opinion,
+      jsonBody: result,
     };
   } catch (error) {
     return {

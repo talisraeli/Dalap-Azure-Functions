@@ -8,16 +8,7 @@ import db from "../utils/database";
 import { FilterQuery } from "mongoose";
 import { IOpinion } from "../models/IOpinion";
 import getClientIp from "../utils/getClientIp";
-
-/**
- * The response body for GET method in route "opinions/get".
- */
-interface IGetOpinionResponseBody {
-  id: string;
-  createdAt: Date;
-  content: string;
-  colorHue: number;
-}
+import IOpinionResponse from "../models/IOpinionResponse";
 
 export async function getOpinion(
   request: HttpRequest,
@@ -62,7 +53,7 @@ export async function getOpinion(
     const opinion = await db.opinions.findOne(filter).skip(randomSkipNumber);
 
     // Returning the result.
-    const result: IGetOpinionResponseBody = {
+    const result: IOpinionResponse = {
       id: opinion._id.toHexString(),
       createdAt: opinion._id.getTimestamp(),
       content: opinion.content,

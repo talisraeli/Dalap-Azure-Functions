@@ -6,20 +6,13 @@ import {
 } from "@azure/functions";
 import db from "../utils/database";
 import getClientIp from "../utils/getClientIp";
+import IOpinionResponse from "../models/IOpinionResponse";
 
 /**
  * The request body for POST method in route "opinions/vote/{id}".
  */
 interface IVoteOpinionRequestBody {
   isAgree: boolean;
-}
-
-/**
- * The response body for POST method in route "opinions/vote/{id}".
- */
-interface IVoteOpinionResponseBody {
-  agree: number;
-  disagree: number;
 }
 
 export async function voteOpinion(
@@ -103,9 +96,15 @@ export async function voteOpinion(
     );
 
     // Returning the result.
-    const result: IVoteOpinionResponseBody = {
-      agree: await modifiedOpinion.votes.agree.length,
-      disagree: await modifiedOpinion.votes.disagree.length,
+    const result: IOpinionResponse = {
+      id: modifiedOpinion._id.toHexString(),
+      createdAt: modifiedOpinion._id.getTimestamp(),
+      content: modifiedOpinion.content,
+      colorHue: modifiedOpinion.colorHue,
+      votes: {
+        agree: await modifiedOpinion.votes.agree.length,
+        disagree: await modifiedOpinion.votes.disagree.length,
+      },
     };
     return { jsonBody: result };
   } catch (error) {
