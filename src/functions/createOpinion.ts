@@ -5,8 +5,8 @@ import {
   InvocationContext,
 } from "@azure/functions";
 import db from "../utils/database";
-import getClientIp from "../utils/getClientIp";
 import IOpinionResponse from "../models/IOpinionResponse";
+import authorize from "../utils/authorize";
 
 /**
  * The request body for POST method in route "opinions/create".
@@ -24,6 +24,25 @@ export async function createOpinion(
   try {
     // Reading request body
     dto = (await request.json()) as ICreateOpinionRequestBody;
+
+    if (dto.content === undefined) {
+      return {
+        status: 400,
+        jsonBody: { error: "Field 'content' isn't defined." },
+      };
+    }
+
+    // Regex validator for the request's body content.
+    // Checking for 8-128 length sentence; Hebrew, English, digits, or whitespace chars;
+    // and no more than two following whitespaces.
+    const contentValudator = /(?!.*\s{2,}.*)^[a-zA-Zא-ת\d ]{8,128}$/g;
+
+    if (!contentValudator.test(dto.content)) {
+      return {
+        status: 400,
+        jsonBody: { error: "Field 'content' isn't valid." },
+      };
+    }
   } catch (error) {
     return {
       status: 400,
@@ -31,60 +50,49 @@ export async function createOpinion(
     };
   }
 
-  let ip: string;
-
   try {
-    // Reading client IP
-    ip = getClientIp(request);
-  } catch (error) {
-    return {
-      status: 400,
-      jsonBody: { error: "Couldn't parse your IP address." },
-    };
-  }
+    // Authorizes the user.
+    const user = await authorize(request);
 
-  if (!dto.content) {
-    return {
-      status: 400,
-      jsonBody: { error: "Field 'content' isn't defined." },
-    };
-  }
+    if (!user) {
+      return {
+        status: 401,
+        jsonBody: { error: "User not authorized." },
+      };
+    }
 
-  // Regex validator for the request's body content.
-  // Checking for 8-128 length sentence; Hebrew, English, digits, or whitespace chars;
-  // and no more than two following whitespaces.
-  const contentValudator = /(?!.*\s{2,}.*)^[a-zA-Zא-ת\d ]{8,128}$/g;
+    try {
+      // Creating the opinion
+      const opinion = await db.opinions.create({
+        author: user._id,
+        content: dto.content,
+        colorHue: Math.floor(Math.random() * 360),
+        ["votes.agree"]: [user._id],
+      });
 
-  if (!contentValudator.test(dto.content)) {
-    return {
-      status: 400,
-      jsonBody: { error: "Field 'content' isn't valid." },
-    };
-  }
-
-  try {
-    // Creating the opinion
-    const opinion = await db.opinions.create({
-      content: dto.content,
-      colorHue: Math.floor(Math.random() * 360),
-      ["votes.agree"]: [ip],
-    });
-
-    // Returning the result.
-    const result: IOpinionResponse = {
-      id: opinion._id.toHexString(),
-      createdAt: opinion._id.getTimestamp(),
-      content: opinion.content,
-      colorHue: opinion.colorHue,
-      votes: {
-        agree: 1,
-        disagree: 0,
-      },
-    };
-    return {
-      status: 201,
-      jsonBody: result,
-    };
+      // Returning the result.
+      const result: IOpinionResponse = {
+        id: opinion._id.toHexString(),
+        createdAt: opinion._id.getTimestamp(),
+        content: opinion.content,
+        colorHue: opinion.colorHue,
+        votes: {
+          agree: 1,
+          disagree: 0,
+        },
+      };
+      return {
+        status: 201,
+        jsonBody: result,
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        jsonBody: {
+          error: "An unexpected error occurred while processing your request.",
+        },
+      };
+    }
   } catch (error) {
     return {
       status: 500,

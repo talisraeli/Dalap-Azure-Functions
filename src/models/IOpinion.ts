@@ -1,11 +1,14 @@
+import { Types } from "mongoose";
+
 /**
  * The opinion base model interface
  */
 export interface IOpinion {
+  author: Types.ObjectId;
   content: string;
   colorHue: number;
   votes: {
-    agree: string[];
-    disagree: string[];
+    agree: Types.ObjectId[];
+    disagree: Types.ObjectId[];
   };
 }
