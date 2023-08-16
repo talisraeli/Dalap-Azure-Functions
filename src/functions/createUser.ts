@@ -39,10 +39,6 @@ export async function createUser(
           maxAge: 60 * 60 * 24 * 365 * 10, // 10 years,
           sameSite: "Strict",
           path: "/",
-          domain:
-            process.env["PROFILE"] === "development"
-              ? ".localhost"
-              : ".דלפ.ישראל",
           secure: true,
           httpOnly: true,
         },
