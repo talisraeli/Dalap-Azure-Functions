@@ -37,7 +37,7 @@ export async function createUser(
           name: "token",
           value: user.token,
           maxAge: 60 * 60 * 24 * 365 * 10, // 10 years,
-          sameSite: "Strict",
+          sameSite: "None",
           path: "/",
           secure: true,
           httpOnly: true,
