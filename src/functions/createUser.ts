@@ -42,7 +42,7 @@ export async function createUser(
           domain:
             process.env["PROFILE"] === "development"
               ? ".localhost"
-              : ".xn--7dbsy.xn--4dbrk0ce",
+              : ".דלפ.ישראל",
           secure: true,
           httpOnly: true,
         },
