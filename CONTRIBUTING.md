@@ -133,7 +133,45 @@ Enhancement suggestions are tracked as [GitHub issues](https://github.com/talisr
 
 ### Your First Code Contribution
 
-#### Configure Your Environment
+You have two options for setting up the project: first one uses Docker; second one uses manual development environment.
+
+We recommend to use the first one with Docker, it will install all the environment for you.
+
+#### Option #1: Using Docker (Recommended)
+
+##### Configure Your Environment
+
+Before you get started, make sure you have [Docker](https://www.docker.com/) installed.
+
+##### Setup The Project
+
+1. Fork the repo from [GitHub](https://github.com/talisraeli/Dalap-Azure-Functions) and clone it to your local environment, with the following Git command:
+
+   _Make sure you <u>replace</u> `<Username>` with <u>your GitHub username</u>!_
+
+   ```bash
+   git clone https://github.com/<Username>/Dalap-Azure-Functions.git
+   ```
+
+2. Make a copy of `template.local.settings.json` file in the root folder, and rename it to `local.settings.json`.
+
+##### Run Functions
+
+Start your local development environment by running the following command:
+
+```bash
+docker compose up -d --build
+```
+
+To stop the Docker container, run:
+
+```bash
+docker compose down
+```
+
+#### Option #2: Using Manual Development Environment
+
+##### Configure Your Environment
 
 Before you get started, make sure you have the following requirements in place:
 
@@ -147,48 +185,33 @@ Before you get started, make sure you have the following requirements in place:
 
 - [MongoDB Community Server](https://www.mongodb.com/try/download/community) or [Atlas](https://www.mongodb.com/atlas) database.
 
-#### Setup The Project
+##### Setup The Project
 
-1. Fork the repo from [GitHub](https://github.com/talisraeli/Dalap-Azure-Functions).
+1. Fork the repo from [GitHub](https://github.com/talisraeli/Dalap-Azure-Functions) and clone it to your local environment, with the following Git command:
 
-2. Create `local.settings.json` file in the root folder, and paste the following code in the code editor window.
+   _Make sure you <u>replace</u> `<Username>` with <u>your GitHub username</u>!_
 
-```json
-{
-  "IsEncrypted": false,
-  "Values": {
-    "FUNCTIONS_WORKER_RUNTIME": "node",
-    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "AzureWebJobsFeatureFlags": "EnableWorkerIndexing",
-    "MONGO_CONNECTION_STRING": "<your connection string>",
-    "PROFILE": "development"
-  },
-  "Host": {
-    "CORS": "http://localhost:4200",
-    "CORSCredentials": true
-  }
-}
-```
+   ```bash
+   git clone https://github.com/<Username>/Dalap-Azure-Functions.git
+   ```
 
-3. Create a new MongoDB database in your local envierment or in Atlas cloud platform.
+2. Make a copy of `template.local.settings.json` file in the root folder, and rename it to `local.settings.json`.
 
-4. Replace `<your connection string>` with your MongoDB connection string.
+3. Replace the default connection string value in the `MONGO_CONNECTION_STRING` field with your MongoDB connection string. You can read about MongoDB connection strings [here](https://www.mongodb.com/docs/manual/reference/connection-string/).
 
-#### Debug Functions
+##### Debug Functions
 
 1. Start the local storage emulator by running the following command:
 
-```bash
-npm run devstorage
-```
+   ```bash
+       npm run devstorage
+   ```
 
 2. Start debugging (<kbd>F5</kbd>) and check if your project runs on [localhost:4200](http://localhost:4200).
 
 ### Improving The Documentation
 
 - Add the missing parts in this document.
-
-- Resolve an easier solution for running this project locally.
 
 <!-- TODO
 Updating, improving and correcting the documentation
