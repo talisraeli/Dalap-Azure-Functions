@@ -204,7 +204,7 @@ Before you get started, make sure you have the following requirements in place:
 1. Start the local storage emulator by running the following command:
 
    ```bash
-       npm run devstorage
+   npm run devstorage
    ```
 
 2. Start debugging (<kbd>F5</kbd>) and check if your project runs on [localhost:4200](http://localhost:4200).
