@@ -1,0 +1,14 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureWebJobsFeatureFlags": "EnableWorkerIndexing",
+    "MONGO_CONNECTION_STRING": "mongodb://mongo:27017/dalap?retryWrites=true&w=majority",
+    "PROFILE": "development"
+  },
+  "Host": {
+    "CORS": "http://localhost:4200",
+    "CORSCredentials": true
+  }
+}
