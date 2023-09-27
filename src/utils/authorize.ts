@@ -1,5 +1,6 @@
 import { HttpRequest } from "@azure/functions";
 import db from "./database";
+import { parseCookies } from "./parseCookies";
 
 /**
  * Authorizes a user by reading the request headers.
@@ -11,7 +12,8 @@ export default async function authorize(request: HttpRequest) {
     return undefined;
   }
 
-  const token = request.headers.get("cookie").split("=")[1];
+  const cookies = parseCookies(request.headers.get("cookie"));
+  const token = cookies.token;
 
   if (token === undefined) {
     return undefined;
